@@ -1764,15 +1764,18 @@ class MeanShift {
         }
     }
 
+    // Default weight (none) for instances during mean shift
     default_weight(distance) {
         return 1;
     }
 
+    // Gaussian kernel (more weight to close instances) for instances during mean shift
     gaussian_kernel_weight(distance) {
         let val = ( 1 / (this.bandwidth * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow(distance / this.bandwidth, 2));
         return val;
     }
 
+    // Checks if centroid assignment has changed
     updated(old_n, new_n) {
         let o = [];
         let n = [];
