@@ -132,13 +132,11 @@ class DBScan {
 
         for (let j = 0; j < this.clusters.length; j++) {
             let C = this.clusters[j];
-            //console.log(C.id + " - " + C.points.length);
-            //console.log(C.points.length);
             for (let i = 0; i < C.points.length; i++) {
                 let N = C.points[i];
                 if (N.is_core) {
                     if (this.dist_func(inst, N) <= this.eps) {
-                        return C.id;
+                        return C.label;
                     }
                 }
             }
@@ -197,9 +195,9 @@ class DBScan {
     Holds a DBSCAN cluster of instances.
 */
 class DBCluster {
-    constructor(id) {
+    constructor(label) {
         this.points = [];
-        this.id = id;
+        this.label = label;
     }
 
     add(P) {

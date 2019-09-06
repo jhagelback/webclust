@@ -212,19 +212,6 @@ class MeanShift {
             }
             new_x.push(ctr.x); // Updated centroid center
         }
-
-        // Check if any centroid has moved
-        /*let updated = false;
-        for (let i = 0; i < old_x.length; i++) {
-            let oxi = old_x[i];
-            let nxi = new_x[i];
-            // Compare each attribute to see if any has changed
-            for (let j = 0; j < oxi.length; j++) {
-                if (oxi[j] != nxi[j]) {
-                    updated = true;
-                }
-            }
-        }*/
         
         // Stop training if no new assignments were made
         // or if max iterations are reached
@@ -249,7 +236,7 @@ class MeanShift {
     
     // Classifies which cluster an instance belongs to
     classify(i) {
-        let inst = new KMInstance(i);
+        let inst = new MSInstance(i);
         inst.centroid = 0;
         inst.dist = this.dist_func(inst, this.centroids[0]);
 
@@ -330,6 +317,7 @@ class MSCentroid {
     // Constructor
     constructor(x) {
         this.x = x;
+        this.label = -1;
         this.neighbors = [];
     }
 
