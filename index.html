@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Web Clustering Visualizer</title>
+        <meta name="description" content="Web Clustering Visualizer">
+        <link rel="stylesheet" href="style/main.css">
+        <script src="webclust-0.13.js"></script>
+    </head>
+    <body onload="init();update_settings();show_data();show_version();">
+        
+        <!-- Header logo -->
+        <center>
+          <table>
+            <tr>
+              <td width="100">&nbsp;</td>
+              <td width="530"><center><img class="round" src="style/logo.png"/></center></td>
+              <td width="100" style="text-align:right;vertical-align: bottom;"><span class="lblue" onclick="javascript:toggle('about');">About</span></td>
+            </tr>
+          </table>
+        </center>
+        <!-- End Header -->
+
+        <br/>
+        
+        <h3 class="f18b">Visualizer</h3>
+        <div class="smalltext">
+            This is a visualization of how different clustering algorithms generate clusters for some different datasets. You can also experiment with how hyperparameter settings affect the algorithms.
+        </div>
+
+        <div class="smalltext">
+            <br>
+            <table>
+                <tr>
+                    <th width="780" class="dark">Select Dataset&nbsp;&nbsp;&nbsp;<span class="help" onclick="javascript:toggle('helpselect');">&nbsp;?&nbsp;</span></th>
+                </tr>
+                <tr>
+                    <td>
+                      <input type="radio" name="sel-ds" value="spiral" id="spiral" onchange="javascript:show_data();update_settings()" checked />
+                      <label for="spiral">
+                        <img src="gfx/spiral.png" alt="" width=100/>
+                      </label>
+                      <input type="radio" name="sel-ds" value="flame" id="flame" onchange="javascript:show_data();update_settings()"/>
+                      <label for="flame">
+                        <img src="gfx/flame.png" alt="" width=100/>
+                      </label>
+                      <input type="radio" name="sel-ds" value="moons" id="moons" onchange="javascript:show_data();update_settings()"/>
+                      <label for="moons">
+                        <img src="gfx/moons.png" alt="" width=100/>
+                      </label>
+                      <input type="radio" name="sel-ds" value="gaussian" id="gaussian" onchange="javascript:show_data();update_settings()"/>
+                      <label for="gaussian">
+                        <img src="gfx/gaussian.png" alt="" width=100/>
+                      </label>
+                      <input type="radio" name="sel-ds" value="aggregation" id="aggregation" onchange="javascript:show_data();update_settings()"/>
+                      <label for="aggregation">
+                        <img src="gfx/aggregation.png" alt="" width=100/>
+                      </label>
+                  </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="smalltext">
+            <br>
+            <table>
+                <tr>
+                    <th width="780" class="dark" title="Select which machine learning algorithm you want to use on the dataset you have selected above">Select Algorithm</th>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="radio" name="sel-cl" value="kmeans" id="kmeans" onchange="javascript:update_settings()" checked />
+                    <label for="kmeans">K-Means</label>
+                    &nbsp;&nbsp;
+                    <input type="radio" name="sel-cl" value="dbscan" id="dbscan" onchange="javascript:update_settings()"/>
+                    <label for="dbscan">DBSCAN</label>
+                    &nbsp;&nbsp;
+                    <input type="radio" name="sel-cl" value="meanshift" id="meanshift" onchange="javascript:update_settings()"/>
+                    <label for="meanshift">Mean-Shift</label>
+                  </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="smalltext">
+            <br>
+            <table>
+                <tr>
+                    <th width="780" class="dark">
+                      <span width="30" id="hyper_bt" style="cursor:pointer;" onclick="javascript:toggle_bt('hyper');">&#9658;</span>&nbsp;&nbsp;
+                      Set Hyperparameters&nbsp;&nbsp;&nbsp;<span class="help" onclick="javascript:toggle('helphyper');">&nbsp;?&nbsp;</span>
+                    </th>
+                </tr>
+                <tr id="hyper" style="display:none;">
+                    <td id="opts"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="smalltext">
+            <br>
+            <table>
+                <tr>
+                    <th width="780" colspan="5" class="dark">Visualization&nbsp;&nbsp;&nbsp;<span class="help" onclick="javascript:toggle('helpvis');">&nbsp;?&nbsp;</span></th>
+                </tr>
+                <tr>
+                    <td width="30">
+                        <button class="enabled" id="demo" onclick="javascript:demo();">&#9658;</button>
+                    </td>
+                    <td width="90">
+                        <button class="disabled" id="stop" onclick="javascript:stop_demo();">&#9724;</button>
+                    </td>
+                    <td id="citer" width="100" style="vertical-align: middle;">&nbsp;</td>
+                    <td id="clusters" width="100" style="vertical-align: middle;">&nbsp;</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+            
+        <br>
+
+        <center>
+        <canvas id="can" width="500" height="500"></canvas>
+        <img id="canvasimg" class="cimg">
+        </center>
+        
+        <div class="popup" id="helpselect" style="display:none;">
+          <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('helpselect')">Close</span></div>
+          <h3>Dataset selection</h3>
+          Visualizer contains five generated two-dimensional datasets that can be used to demonstrate how different clustering algorithms generate clusters for different problems. Each algorithm generate clusters in different ways.
+          <br>&nbsp;
+        </div>
+
+        <div class="popup" id="helpvis" style="display:none;">
+          <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('helpvis')">Close</span></div>
+          <h3>Visualization</h3>
+          The visualization shows the decision boundaries for the clusters the algorithm has found on the dataset. 
+          <br>&nbsp;
+        </div>
+
+        <div class="popup" id="helphyper" style="display:none;">
+          <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('helphyper')">Close</span></div>
+          Click &#9658; to expand the Set Hyperparameters section.
+          <h3>Hyperparameters</h3>
+          The hyperparameters (configurations of the algorithm) are set so each algorithm generate good clusters.
+          You can change the hyperparameters to see how different configurations affect how the algorithm generate clusters.
+          <br>&nbsp;
+        </div>
+
+        <div class="popup" id="about" style="display:none;">
+          <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('about')">Close</span></div>
+          <center><img class="round" src="style/logo.png" width="200"/></center>
+          <h3>About Web Clustering Demonstrator</h3>
+          Web Clustering Demonstrator is a demonstrator for clustering algorithms running purely on the client browser. All algorithms 
+          are implemented in JavaScript for the purpose of this demonstrator. They are not optimized for high performance and don't
+          have all the functionality of state-of-the-art implementations. The main purpose of this demonstrator is to be used as a 
+          tool when teaching and explaining clustering and clustering related concepts.
+          <br><br>
+          Web ML Demonstrator is developed by Johan Hagelbäck, senior lecturer at Linnaeus University in Kalmar, Sweden. Contact details
+          for the developer is <a href="https://lnu.se/personal/johan.hagelback/" target="_blank">here</a>.<br><br>
+          Library version: <span id="version" style="color:#c00;"></span>
+          <br>&nbsp;
+        </div>
+    </body>
+</html>
