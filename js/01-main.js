@@ -85,6 +85,41 @@ function stop_demo() {
 }
 
 /**
+    Optimize the k-value for K-Means clustering.
+*/
+async function optimize_k() {
+    running = true;
+    
+    // Wait function
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    
+    // Disable button
+    disable("demo", "running");
+    await delay(25);
+    
+    // Get dataset name
+    let name = get_selected_dataset();
+    // Get data
+    let data = orig_data.clone();
+
+    // Get params
+    let dist = get_select_list("dist", 0);
+    let init = get_select_list("init", 1);
+    let seed = get_value("seed", 42, 0, 10000);
+
+    // Run silhouette score optimization
+    let opt = new KOptimizer(data, dist, init, seed);
+    let k = opt.optimize();
+    
+    document.getElementById("k").value = k;
+
+    // Enable button
+    enable("demo");
+
+    running = false;
+}
+
+/**
     Creates a map of the dedision boundaries for the current trained clustering algorithm.
 */
 function create_decision_boundaries(classifier, opt) {
@@ -132,7 +167,7 @@ function validate_setting(id, value, min_val, max_val) {
 function build_cluster(type) {
     if (type == "kmeans") {
         // Get options
-        let k = get_value("k", 3, 1, 10);
+        let k = get_value("k", 3, 1, 32);
         let dist = get_select_list("dist", 0);
         let init = get_select_list("init", 1);
         let seed = get_value("seed", 42, 0, 10000);
@@ -361,6 +396,9 @@ function update_settings() {
         html += "<td class='param'>Distance function:</td><td><select id='dist' class='value'><option value='0'>Euclidean</option><option value='1'>Manhattan</option><option value='2'>Chebyshev</option></select></td>";
         html += "<td class='param'>Initialization:</td><td><select id='init' class='value'><option value='1'>K-Means++</option><option value='0'>Random</option></select></td>";
         html += "<td class='param'>Seed:</td><td><input class='value' name='seed' id='seed' value='" + settings[1] + "'></td>";
+        html += "</tr><tr>";
+        html += "<td colspan='2' class='param'><input type='button' style='background-color: #d4e3cf;' onclick='javascript:optimize_k()' value='Find no clusters'></button></td>";
+        html += "<td colspan='6'>Find optimal number of clusters using silhouette score</td>";
     }
     else if (type == "dbscan") {
         html += "<td class='param'>Epsilon:</td><td><input class='value' name='eps' id='eps' value='" + settings[0] + "'></td>";

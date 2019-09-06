@@ -240,7 +240,7 @@ class KMeans {
     // Calculates distance (Euclidean) between an instance and a centroid
     dist_euclidean(inst, c) {
         let sumSq = 0;
-        for (let i = 0; i < c.no_attr(); i++) {
+        for (let i = 0; i < c.x.length; i++) {
             sumSq += Math.pow(inst.x[i] - c.x[i], 2);
         }
         sumSq = Math.sqrt(sumSq);
@@ -250,7 +250,7 @@ class KMeans {
     // Calculates Manhattan distance between an instance and a centroid
     dist_manhattan(inst, c) {
         let sum = 0;
-        for (let i = 0; i < c.no_attr(); i++) {
+        for (let i = 0; i < c.x.length; i++) {
             sum += Math.abs(inst.x[i] - c.x[i]);
         }
         return sum;
@@ -259,7 +259,7 @@ class KMeans {
     // Calculates Chebyshev distance between an instance and a centroid
     dist_chebyshev(inst, c) {
         let best_v = 0;
-        for (let i = 0; i < c.no_attr(); i++) {
+        for (let i = 0; i < c.x.length; i++) {
             let v = Math.abs(inst.x[i] - c.x[i]);
             if (v > best_v) {
                 best_v = v;
@@ -320,5 +320,95 @@ class KMCentroid {
     // Number of attributes
     no_attr() {
         return this.x.length;
+    }
+}
+
+/**
+    Finds optimal number of clusters (k-value) using silhouette scores.
+*/
+class KOptimizer {
+    // Constructor
+    constructor(orig_data, distf, initf, seed) {
+        this.km = null;
+        this.data = null;
+        this.orig_data = orig_data;
+        this.distf = distf;
+        this.initf = initf;
+        this.seed = seed;
+    }
+
+    // Runs the optimization. 
+    // Tests all k-values between the specified start and end k.
+    optimize(start_k = 2, end_k = 20) {
+        let best_k = -1;
+        let best_score = -2; // Range between -1 and +1
+
+        for (let k = start_k; k <= end_k; k++) {
+            let score = this.calc_silhouette_score(k);
+            if (score > best_score) {
+                best_score = score;
+                best_k = k;
+            }
+        }
+
+        return best_k;
+    }
+
+    // Calculates the silhouette score for a k-value
+    calc_silhouette_score(k) {
+        // Run K-Means clustering for the specified k
+        this.km = new KMeans(k, this.distf, this.initf, this.seed);
+        this.km.train(this.orig_data);
+        this.km.iterate_all();
+        this.data = this.km.data;
+
+        // Calculate mean silhouette coefficient over all instances
+        let mean_coef = 0;
+        let cnt = 0;
+        for (let i = 0; i < this.data.length; i++) {
+            let inst = this.data[i];
+            
+            // Calculate mean intra-cluster distance
+            let a = this.mean_cluster_distance(inst, inst.centroid);
+
+            // Calculate mean distance to nearest other cluster
+            let b = 100000;
+            for (let c = 0; c < this.km.centroids.length; c++) {
+                if (c != inst.centroid) {
+                    let bi = this.mean_cluster_distance(inst, c);
+                    if (bi < b) {
+                        b = bi;
+                    }
+                }
+            }
+
+            // Calculate coefficient
+            let coef = (b - a) / Math.max(a, b);
+            mean_coef += coef;
+            cnt++;
+        }
+
+        // Mean coefficient over all instances
+        mean_coef /= cnt;
+
+        return mean_coef;
+    }
+
+    // Calculates the mean distance between the instance and all instances
+    // in the specified cluster.
+    mean_cluster_distance(inst, cid) {
+        let dist = 0;
+        let cnt = 0;
+        for (let i = 0; i < this.data.length; i++) {
+            // Calculate silhouette score for each instance
+            let inst2 = this.data[i];
+            if (cid == inst2.centroid) {
+                //dist += this.dist_euclidean(inst, inst2);
+                dist += this.km.dist_func(inst, inst2);
+                cnt++;
+            }
+        }
+
+        return dist / cnt;
     }
 }
