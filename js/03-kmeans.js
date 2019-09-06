@@ -23,7 +23,7 @@ class KMeans {
             this.dist_func = this.dist_chebyshev;
         }
         else {
-            throw("Unknown distance function: " + dist);
+            throw("Unknown distance function: " + distf);
         }
 
         // Initalizer function

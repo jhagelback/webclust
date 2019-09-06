@@ -25,7 +25,7 @@ class MeanShift {
             this.dist_func = this.dist_chebyshev;
         }
         else {
-            throw("Unknown distance function: " + dist);
+            throw("Unknown distance function: " + distf);
         }
 
         // Current training iteration
