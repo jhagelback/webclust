@@ -40,7 +40,7 @@ class MeanShift {
         return this.centroids.length;
     }
     
-    // Sets if this classifier has iterable training phase
+    // Sets if this algorithm has iterable training phase
     iterable() {
         return true;
     }

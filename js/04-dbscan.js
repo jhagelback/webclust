@@ -35,7 +35,7 @@ class DBScan {
         return this.clusters.length;
     }
     
-    // Sets if this classifier has iterable training phase
+    // Sets if this algorithm has iterable training phase
     iterable() {
         return false;
     }

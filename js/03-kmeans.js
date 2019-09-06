@@ -49,7 +49,7 @@ class KMeans {
         return this.k;
     }
     
-    // Sets if this classifier has iterable training phase
+    // Sets if this algorithm has iterable training phase
     iterable() {
         return true;
     }
