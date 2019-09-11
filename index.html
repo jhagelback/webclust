@@ -6,7 +6,7 @@
         <title>Web Clustering Visualizer</title>
         <meta name="description" content="Web Clustering Visualizer">
         <link rel="stylesheet" href="style/main.css">
-        <script src="webclust-0.14.js"></script>
+        <script src="webclust-0.15.js"></script>
     </head>
     <body onload="init();update_settings();show_data();show_version();">
         
@@ -53,9 +53,9 @@
                       <label for="gaussian">
                         <img src="gfx/gaussian.png" alt="" width=100/>
                       </label>
-                      <input type="radio" name="sel-ds" value="aggregation" id="aggregation" onchange="javascript:show_data();update_settings()"/>
-                      <label for="aggregation">
-                        <img src="gfx/aggregation.png" alt="" width=100/>
+                      <input type="radio" name="sel-ds" value="blobs" id="blobs" onchange="javascript:show_data();update_settings()"/>
+                      <label for="blobs">
+                        <img src="gfx/blobs.png" alt="" width=100/>
                       </label>
                   </td>
                 </tr>

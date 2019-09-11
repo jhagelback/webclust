@@ -342,7 +342,7 @@ class KOptimizer {
     optimize(start_k = 2, end_k = 20) {
         let best_k = -1;
         let best_score = -2; // Range between -1 and +1
-
+        
         for (let k = start_k; k <= end_k; k++) {
             let score = this.calc_silhouette_score(k);
             if (score > best_score) {
