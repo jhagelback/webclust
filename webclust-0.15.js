@@ -936,7 +936,7 @@ function get_settings(type, name) {
 	        return [4, 42];
 	    }
 	    else if (name == "blobs") {
-	        return [5, 42];
+	        return [5, 3];
 	    }
 	    else {
         	return [3, 42];
@@ -953,7 +953,7 @@ function get_settings(type, name) {
 	        return [0.05, 6];
 	    }
 	    else if (name == "gaussian") {
-	        return [0.05, 6];
+	        return [0.06, 7];
 	    }
 	    else if (name == "blobs") {
 	        return [0.04, 6];

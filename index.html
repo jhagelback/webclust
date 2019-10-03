@@ -26,7 +26,7 @@
         
         <h3 class="f18b">Visualizer</h3>
         <div class="smalltext">
-            This is a visualization of how different clustering algorithms generate clusters for some different datasets. You can also experiment with how hyperparameter settings affect the algorithms.
+            This is a visualization of how different clustering algorithms learn clusters for some different datasets. You can also experiment with how hyperparameter settings affect the algorithms.
         </div>
 
         <div class="smalltext">
@@ -128,14 +128,20 @@
         <div class="popup" id="helpselect" style="display:none;">
           <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('helpselect')">Close</span></div>
           <h3>Dataset selection</h3>
-          Visualizer contains five generated two-dimensional datasets that can be used to demonstrate how different clustering algorithms generate clusters for different problems. Each algorithm generate clusters in different ways.
+          Visualizer contains five generated two-dimensional datasets that can be used to demonstrate how different clustering 
+          algorithms learn clusters for different problems. Each algorithm learnsx clusters in different ways, which is visualized
+          in this demonstrator.
           <br>&nbsp;
         </div>
 
         <div class="popup" id="helpvis" style="display:none;">
           <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('helpvis')">Close</span></div>
           <h3>Visualization</h3>
-          The visualization shows the decision boundaries for the clusters the algorithm has found on the dataset. 
+          The visualization shows the decision boundaries for the clusters an algorithm learns on the dataset.
+          <br><br>
+          The small circles show the examples in the dataset, and the colored areas show which cluster each point belongs
+          to. The small red squares show important concepts of an algorithm, such as centroids in K-means and Mean-Shift or
+          core instances in DBSCAN. 
           <br>&nbsp;
         </div>
 
@@ -143,8 +149,17 @@
           <div style='text-align:right;' width='100%'><span class='lred' onclick="toggle('helphyper')">Close</span></div>
           Click &#9658; to expand the Set Hyperparameters section.
           <h3>Hyperparameters</h3>
-          The hyperparameters (configurations of the algorithm) are set so each algorithm generate good clusters.
-          You can change the hyperparameters to see how different configurations affect how the algorithm generate clusters.
+          The hyperparameters (configuration of algorithms) are set so each algorithm learn good clusters on each dataset.
+          You can change the hyperparameters to see how different configurations affect how algorithms learn clusters.
+          <h3>Distance functions</h3>
+          Clustering is based on calculating distances between examples, and there are a wide range of different distance 
+          functions that can be used. For numerical attributes, it is common to use the Euclidean distance (or L2-norm). 
+          Two other common distance functions are Manhattan distance (L1-norm) and Chebyshev distance (L∞-norm).<br>
+          Consider the figure below. We shall calculate the distance between the two points <em>A</em> and <em>B</em>. The 
+          length of the two sides are denoted as <em>x</em> and <em>y</em>.<br>
+          <img src="docs/distance.png"><br>
+          The formulas for calculating the different distance metrics are then:<br><br>
+          <img src="docs/distfunctions.png" width="150">
           <br>&nbsp;
         </div>
 
