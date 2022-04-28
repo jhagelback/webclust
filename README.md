@@ -5,7 +5,7 @@ Web Clustering Demonstrator is a clustering algorithm demonstrator running purel
 
 ### Testing it
 
-[Visualizer](http://aiguy.org/webclust/index.html): A web application where you can see visualizations of how different clustering algorithms generate clusters on a number of two-dimensional datasets.
+[Visualizer](http://aiguy.freecluster.eu/webclust/index.html): A web application where you can see visualizations of how different clustering algorithms generate clusters on a number of two-dimensional datasets.
 
 ### Running it locally
 Web Clustering Demonstrator runs entirely in the browser and doesn't need a web server. Just open the html files in a browser to run it locally.
